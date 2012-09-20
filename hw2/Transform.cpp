@@ -53,6 +53,8 @@ mat4 Transform::perspective(float fovy, float aspect, float zNear, float zFar)
 {
   // YOUR CODE FOR HW2 HERE
   // New, to implement the perspective transform as well.
+  float theta = fovy / 2;
+  float d = cot(glm::radians(theta));
 }
 
 mat4 Transform::scale(const float &sx, const float &sy, const float &sz) {
