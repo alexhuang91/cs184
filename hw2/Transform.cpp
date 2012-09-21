@@ -54,17 +54,34 @@ mat4 Transform::perspective(float fovy, float aspect, float zNear, float zFar)
   // YOUR CODE FOR HW2 HERE
   // New, to implement the perspective transform as well.
   float theta = fovy / 2;
-  float d = cot(glm::radians(theta));
+  float d = 1/tan(glm::radians(theta));
+  float a = -(zFar + zNear)/(zFar - zNear);
+  float b = -(2 * zFar * zNear)/(zFar - zNear);
+  mat4 perspectiveM = mat4( (d/aspect), 0,  0, 0,
+                                     0, d,  0, 0,
+                                     0, 0,  a, b,
+                                     0, 0, -1, 0);
+  return perspectiveM;
 }
 
 mat4 Transform::scale(const float &sx, const float &sy, const float &sz) {
   // YOUR CODE FOR HW2 HERE
   // Implement scaling
+  mat4 scaleM = mat4(sx,  0,  0, 0,
+                      0, sy,  0, 0,
+                      0,  0, sz, 0,
+                      0,  0,  0, 1);
+  return scaleM;
 }
 
 mat4 Transform::translate(const float &tx, const float &ty, const float &tz) {
   // YOUR CODE FOR HW2 HERE
   // Implement translation
+  mat4 translateM = mat4 (1, 0, 0, tx,
+                          0, 1, 0, ty,
+                          0, 0, 1, tz,
+                          0, 0, 0, 1);
+  return translateM;
 }
 
 // To normalize the up direction and construct a coordinate frame.

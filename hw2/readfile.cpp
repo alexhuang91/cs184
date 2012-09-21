@@ -152,16 +152,16 @@ void readfile(const char * filename) {
             // You may need to use the upvector fn in Transform.cpp
             // to set up correctly.
             // Set eyeinit upinit center fovy in variables.h
-            values[0]; //eye
-            values[1]; //eye
-            values[2]; //eye
-            values[3]; //cen
-            values[4]; //cen
-            values[5]; //cen
-            values[6]; //up
-            values[7]; //up
-            values[8]; //up
-            values[9]; //fov
+            eyeinit[0] = values[0]; //eyeinit
+            eyeinit[1] = values[1]; //eyeinit
+            eyeinit[2] = values[2]; //eyeinit
+            center[0] = values[3]; //center
+            center[1] = values[4]; //center
+            center[2] = values[5]; //center
+            upinit[0] = values[6]; //upinit
+            upinit[1] = values[7]; //upinit
+            upinit[2] = values[8]; //upinit
+            fovy = values[9]; //fovy
           }
         }
 
@@ -197,6 +197,7 @@ void readfile(const char * filename) {
             // YOUR CODE FOR HW 2 HERE.
             // Think about how the transformation stack is affected
             // You might want to use helper functions on top of file.
+            mat4 matrix = Transform::translate(values[0], values[1], values[2]);
           }
         }
         else if (cmd == "scale") {
@@ -205,6 +206,7 @@ void readfile(const char * filename) {
             // YOUR CODE FOR HW 2 HERE.
             // Think about how the transformation stack is affected
             // You might want to use helper functions on top of file.
+            mat4 matrix = Transform::scale(values[0], values[1], values[2]);
           }
         }
         else if (cmd == "rotate") {
@@ -214,6 +216,8 @@ void readfile(const char * filename) {
             // values[0..2] are the axis, values[3] is the angle.
             // You may want to normalize the axis (or in Transform::rotate)
             // See how the stack is affected, as above.
+            vec3 axis = vec3(values[0], values[1], values[2]);
+            mat4 matrix = Transform::rotate(values[3], axis);
           }
         }
 
