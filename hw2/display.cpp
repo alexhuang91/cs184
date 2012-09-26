@@ -64,7 +64,8 @@ void display() {
           // YOUR CODE FOR HW 2 HERE.  
           // You need to pass the lights to the shader. 
           // Remember that lights are transformed by modelview first.  
-          
+          glUniform4fv(lightpos, numused, lightposn);
+          glUniform4fv(lightcol, numused, lightcolor);
         }
         else glUniform1i(enablelighting,false) ; 
      
@@ -73,10 +74,13 @@ void display() {
 
         // Transformations for objects, involving translation and scaling 
         mat4 sc(1.0) , tr(1.0), transf(1.0) ; 
-        sc = Transform::scale(sx,sy,1.0) ; 
-        tr = Transform::translate(tx,ty,0.0) ; 
+        sc = glm::transpose(Transform::scale(sx,sy,1.0)); 
+        tr = glm::transpose(Transform::translate(tx,ty,0.0)); 
 
         // YOUR CODE FOR HW 2 HERE.  
+        transf = mv * sc;
+        transf = transf * tr;
+
         // You need to use scale, translate and modelview to 
         // set up the net transformation matrix for the objects.  
         // Account for GLM issues etc.  
@@ -89,6 +93,13 @@ void display() {
           // YOUR CODE FOR HW 2 HERE. 
           // Set up the object transformations 
           // And pass in the appropriate material properties
+          mat4 objtransform = transf * obj->transform;
+          glLoadMatrixf(&(objtransform)[0][0]);
+          glUniform4fv(ambientcol, 1, obj->ambient);
+          glUniform4fv(diffusecol, 1, obj->diffuse);
+          glUniform4fv(specularcol, 1, obj->specular);
+          glUniform4fv(emissioncol, 1, obj->emission);
+          glUniform1f(shininesscol, obj->shininess);
           }
 
           // Actually draw the object

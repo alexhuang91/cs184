@@ -97,14 +97,15 @@ void readfile(const char * filename) {
               // Note that values[0...7] shows the read in values
               // Make use of lightposn[] and lightcolor[] arrays in variables.h
               // Those arrays can then be used in display too.
-              lightposn[4 *numused + 0] = values[0];
-              lightposn[4 * numused + 1] = values[1];
-              lightposn[4 * numused + 2] = values[2];
-              lightposn[4 * numused + 3] = values[3];
-              lightcolor[4 * numused + 0] = values[4];
-              lightcolor[4 * numused + 1] = values[5];
-              lightcolor[4 * numused + 2] = values[6];
-              lightcolor[4 * numused + 3] = values[7];
+              int offset = 4 * numused;
+              lightposn[offset + 0] = values[0];
+              lightposn[offset + 1] = values[1];
+              lightposn[offset + 2] = values[2];
+              lightposn[offset + 3] = values[3];
+              lightcolor[offset + 0] = values[4];
+              lightcolor[offset + 1] = values[5];
+              lightcolor[offset + 2] = values[6];
+              lightcolor[offset + 3] = values[7];
               ++numused ;
             }
           }
@@ -152,16 +153,13 @@ void readfile(const char * filename) {
             // You may need to use the upvector fn in Transform.cpp
             // to set up correctly.
             // Set eyeinit upinit center fovy in variables.h
-            eyeinit[0] = values[0]; //eyeinit
-            eyeinit[1] = values[1]; //eyeinit
-            eyeinit[2] = values[2]; //eyeinit
-            center[0] = values[3]; //center
-            center[1] = values[4]; //center
-            center[2] = values[5]; //center
-            upinit[0] = values[6]; //upinit
-            upinit[1] = values[7]; //upinit
-            upinit[2] = values[8]; //upinit
-            fovy = values[9]; //fovy
+            //            0         1         2        3       4       5     6   7   8   9
+            // camera lookfromx lookfromy lookfromz lookatx lookaty lookatz upx upy upz fovy
+            eyeinit = vec3(values[0] - values[3], values[1] - values[4], values[2] - values[5]);
+            center = vec3(values[3], values[4], values[5]);
+            upinit = vec3(values[6], values[7], values[8]);
+            upinit = Transform::upvector(upinit, eyeinit);
+            fovy = values[9];
           }
         }
 
@@ -197,7 +195,8 @@ void readfile(const char * filename) {
             // YOUR CODE FOR HW 2 HERE.
             // Think about how the transformation stack is affected
             // You might want to use helper functions on top of file.
-            mat4 matrix = Transform::translate(values[0], values[1], values[2]);
+            mat4 translateM = glm::transpose(Transform::translate(values[0], values[1], values[2]));
+            rightmultiply(translateM, transfstack);
           }
         }
         else if (cmd == "scale") {
@@ -206,7 +205,8 @@ void readfile(const char * filename) {
             // YOUR CODE FOR HW 2 HERE.
             // Think about how the transformation stack is affected
             // You might want to use helper functions on top of file.
-            mat4 matrix = Transform::scale(values[0], values[1], values[2]);
+            mat4 scaleM = glm::transpose(Transform::scale(values[0], values[1], values[2]));
+            rightmultiply(scaleM, transfstack);
           }
         }
         else if (cmd == "rotate") {
@@ -217,7 +217,9 @@ void readfile(const char * filename) {
             // You may want to normalize the axis (or in Transform::rotate)
             // See how the stack is affected, as above.
             vec3 axis = vec3(values[0], values[1], values[2]);
-            mat4 matrix = Transform::rotate(values[3], axis);
+            mat3 _rotateM = glm::transpose(Transform::rotate(values[3], axis));
+            mat4 rotateM = mat4(_rotateM);
+            rightmultiply(rotateM, transfstack);
           }
         }
 
