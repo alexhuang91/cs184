@@ -79,7 +79,7 @@ void display() {
       for (int i = 0; i < 4; i++) {
         tmp[i] = lightposn[offset + i];
       }
-      tmp = tmp * mv;
+      tmp = mv * tmp;
       for (int i = 0; i < 4; i++) {
         lightransf[offset + i] = tmp[i];
       }

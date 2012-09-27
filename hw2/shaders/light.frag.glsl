@@ -49,7 +49,7 @@ void main (void)
 {
     if (enablelighting) {
 
-        vec4 finalcolor = vec4(0,0,0,0); //ambient + emission;
+        vec4 finalcolor = ambient + emission; //ambient + emission;
 
         // YOUR CODE FOR HW 2 HERE
         // A key part is implementation of the fragment shader
@@ -67,20 +67,20 @@ void main (void)
 	for (int i = 0; i < numLights; i++) {
 		vec3 direction;
 		//for directional lighting
-		if (lightposn[4*i].w == 0) {
-			direction = normalize(lightposn[4*i].xyz);
+		if (lightposn[i].w == 0) {
+			direction = normalize(lightposn[i].xyz);
 		}
 		//for point lighting
 		else {
-        		vec3 position = lightposn[4*i].xyz / lightposn[4*i].w ; 
+        		vec3 position = lightposn[i].xyz / lightposn[i].w ; 
         		direction = normalize(position - mypos) ; // no attenuation 
 		}
 		vec3 halfvec = normalize(direction + eyedirn) ;  
-       		vec4 col = ComputeLight(direction, lightcolor[4*i], normal, halfvec, diffuse, specular, shininess) ;
+       		vec4 col = ComputeLight(direction, lightcolor[i], normal, halfvec, diffuse, specular, shininess) ;
 		finalcolor += col;
 	}
         
-        gl_FragColor = ambient + emission + finalcolor;
+        gl_FragColor = finalcolor;
         }
     else gl_FragColor = color ; 
 }
