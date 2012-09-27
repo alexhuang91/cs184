@@ -33,12 +33,15 @@ uniform float shininess ;
 
 
 vec4 ComputeLight (const in vec3 direction, const in vec4 lightcolor, const in vec3 normal, const in vec3 halfvec, const in vec4 mydiffuse    , const in vec4 myspecular, const in float myshininess) {
+	vec3 _normal = normalize(normal);
+	vec3 _direction = normalize(direction);
+	vec3 _halfvec = normalize(halfvec);
 
-        float nDotL = dot(normal, direction)  ;
-        vec4 lambert = mydiffuse * lightcolor * max (nDotL, 0.0) ;
-        float nDotH = dot(normal, halfvec) ;
-        vec4 phong = myspecular * lightcolor * pow (max(nDotH, 0.0), myshininess) ;
-        vec4 retval = lambert + phong ;
+        float nDotL = dot(_normal, _direction)  ;
+        vec4 lambert = mydiffuse * max (nDotL, 0.0) ;
+        float nDotH = dot(_normal, _halfvec) ;
+        vec4 phong = myspecular * pow (max(nDotH, 0.0), myshininess) ;
+        vec4 retval = lightcolor * (lambert + phong);
         return retval ;
 }
 
@@ -46,32 +49,38 @@ void main (void)
 {
     if (enablelighting) {
 
-        vec4 finalcolor ;
+        vec4 finalcolor = vec4(0,0,0,0); //ambient + emission;
 
         // YOUR CODE FOR HW 2 HERE
         // A key part is implementation of the fragment shader
-	int i;
-	vec3 position, direction, halfvec;
-	vec4 col;
-	finalcolor = ambient + emission;
-
         const vec3 eyepos = vec3(0,0,0) ; 
         vec4 _mypos = gl_ModelViewMatrix * myvertex ; 
         vec3 mypos = _mypos.xyz / _mypos.w ; // Dehomogenize current location 
         vec3 eyedirn = normalize(eyepos - mypos) ; 
 
         // Compute normal, needed for shading. 
-        vec3 normal = normalize(gl_NormalMatrix * mynormal) ; 
+        // vec3 normal = normalize(gl_NormalMatrix * mynormal) ; 
+        vec3 _normal = (gl_ModelViewMatrixInverseTranspose*vec4(mynormal,0.0)).xyz ; 
+        vec3 normal = normalize(_normal) ; 
 
-	for (i = 0; i < numused; i++) {
-        	position = lightposn[4*i].xyz / lightposn[4*i].w ; 
-        	direction = normalize(position - mypos) ; // no attenuation 
-        	halfvec = normalize(direction + eyedirn) ;  
-        	col = ComputeLight(direction, lightcolor[4*i], normal, halfvec, diffuse, specular, shininess) ;
+
+	for (int i = 0; i < numLights; i++) {
+		vec3 direction;
+		//for directional lighting
+		if (lightposn[4*i].w == 0) {
+			direction = normalize(lightposn[4*i].xyz);
+		}
+		//for point lighting
+		else {
+        		vec3 position = lightposn[4*i].xyz / lightposn[4*i].w ; 
+        		direction = normalize(position - mypos) ; // no attenuation 
+		}
+		vec3 halfvec = normalize(direction + eyedirn) ;  
+       		vec4 col = ComputeLight(direction, lightcolor[4*i], normal, halfvec, diffuse, specular, shininess) ;
 		finalcolor += col;
 	}
         
-        gl_FragColor = finalcolor; 
+        gl_FragColor = ambient + emission + finalcolor;
         }
     else gl_FragColor = color ; 
 }
