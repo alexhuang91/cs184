@@ -19,23 +19,23 @@ GLuint vertexshader, fragmentshader, shaderprogram; // shaders
 
 
 void display() {	
-	//First, the ModelViewProjection Matrix is setup
-	//this determines how the scene will be viewed
-	float m[] = {	2.0, 0, 0, 0,
-		0, 2.0, 0, 0,
-		0, 0, 2.0, 0,
-		-1.0, -1.0, 0, 1.0};
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(m); 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+  //First, the ModelViewProjection Matrix is setup
+  //this determines how the scene will be viewed
+  float m[] = {	2.0, 0, 0, 0,
+    0, 2.0, 0, 0,
+    0, 0, 2.0, 0,
+    -1.0, -1.0, 0, 1.0};
+  glMatrixMode(GL_MODELVIEW);
+  glLoadMatrixf(m); 
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
 
-	//Second, the framebuffer is filled with the objects in the scene
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if (scene.theOnlyCurve) {
-		scene.theOnlyCurve->draw(scene.levelOfDetail);
-	}
-	glutSwapBuffers();
+  //Second, the framebuffer is filled with the objects in the scene
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if (scene.theOnlyCurve) {
+    scene.theOnlyCurve->draw(scene.levelOfDetail);
+  }
+  glutSwapBuffers();
 }
 
 // The initialization function for curves does almost nothing. 
@@ -43,23 +43,23 @@ void display() {
 // Since we are drawing in 2D, the shaders don't really matter much.  
 
 void init() {
-	vertexshader = initshaders(GL_VERTEX_SHADER, "shaders/nop.vert.glsl");
-	fragmentshader = initshaders(GL_FRAGMENT_SHADER, "shaders/nop.frag.glsl");
-	shaderprogram = initprogram(vertexshader, fragmentshader); 
+  vertexshader = initshaders(GL_VERTEX_SHADER, "shaders/nop.vert.glsl");
+  fragmentshader = initshaders(GL_FRAGMENT_SHADER, "shaders/nop.frag.glsl");
+  shaderprogram = initprogram(vertexshader, fragmentshader); 
 }
 
 int main(int argc, char* argv[]) {
-	glutInit( &argc, argv );
-	glutInitWindowSize( scene.width, scene.height );
-	glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-	glutCreateWindow( "HW4: Curves" );
-	init(); 
-	glutDisplayFunc( display );
-	glutKeyboardFunc( scene.keyboard );
-	glutMouseFunc( scene.mouse );
-	glutReshapeFunc( scene.reshape );
-	glutPassiveMotionFunc( scene.passiveMotion );
-	glutMotionFunc( scene.drag );	
-	glutMainLoop();
-	return 0;
+  glutInit( &argc, argv );
+  glutInitWindowSize( scene.width, scene.height );
+  glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
+  glutCreateWindow( "HW4: Curves" );
+  init(); 
+  glutDisplayFunc( display );
+  glutKeyboardFunc( scene.keyboard );
+  glutMouseFunc( scene.mouse );
+  glutReshapeFunc( scene.reshape );
+  glutPassiveMotionFunc( scene.passiveMotion );
+  glutMotionFunc( scene.drag );	
+  glutMainLoop();
+  return 0;
 }

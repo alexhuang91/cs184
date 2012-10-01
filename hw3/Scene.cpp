@@ -30,51 +30,51 @@ Curve * Scene::theOnlyCurve = NULL;
 // + and - alter level of detail, q quits. 
 void Scene::keyboard( unsigned char key, int x, int y )
 {
-	switch(key) {
-		case '0':
-			if (theOnlyCurve) delete theOnlyCurve;
-			theOnlyCurve = new Curve();
-			printf("Straight Line.\n");
-			break;
-		case '1':
-			if (theOnlyCurve) delete theOnlyCurve;
-			theOnlyCurve = new Bezier();
-			printf("Bezier Curve.\n");
-			break;
-		case '2':
-			if (theOnlyCurve) delete theOnlyCurve;
-			theOnlyCurve = new Bspline();
-			printf("Bspline Curve.\n");
-			break;
-		case '3':
-			if (theOnlyCurve) delete theOnlyCurve;
-			theOnlyCurve = new Bezier2();
-			printf("Bezier 2 Curve.\n");
-			break;
-		case '+':
-			levelOfDetail++;
-			break;
-		case '-':
-			levelOfDetail--;
-			break;
-		case 'q':
-		case 27:
-			exit(0) ;
-			break ;
-	}
-	if (levelOfDetail < 1) {
-		levelOfDetail = 1;
-	}
-	printf("Level of Detail: %d.\n", levelOfDetail);
-	glutPostRedisplay();
+  switch(key) {
+    case '0':
+      if (theOnlyCurve) delete theOnlyCurve;
+      theOnlyCurve = new Curve();
+      printf("Straight Line.\n");
+      break;
+    case '1':
+      if (theOnlyCurve) delete theOnlyCurve;
+      theOnlyCurve = new Bezier();
+      printf("Bezier Curve.\n");
+      break;
+    case '2':
+      if (theOnlyCurve) delete theOnlyCurve;
+      theOnlyCurve = new Bspline();
+      printf("Bspline Curve.\n");
+      break;
+    case '3':
+      if (theOnlyCurve) delete theOnlyCurve;
+      theOnlyCurve = new Bezier2();
+      printf("Bezier 2 Curve.\n");
+      break;
+    case '+':
+      levelOfDetail++;
+      break;
+    case '-':
+      levelOfDetail--;
+      break;
+    case 'q':
+    case 27:
+      exit(0) ;
+      break ;
+  }
+  if (levelOfDetail < 1) {
+    levelOfDetail = 1;
+  }
+  printf("Level of Detail: %d.\n", levelOfDetail);
+  glutPostRedisplay();
 }
 
 // Standard reshape functions to change width and height as needed.  
 void Scene::reshape(int w, int h) {
-	width = w;
-	height = h;
-	glViewport( 0,0, w, h );
-	glutPostRedisplay();
+  width = w;
+  height = h;
+  glViewport( 0,0, w, h );
+  glutPostRedisplay();
 }
 
 
@@ -86,11 +86,11 @@ void Scene::drag(int x, int y) {}
 // Note also that the height is properly inverted to take account of
 // bottom to top vs top to bottom conventions.
 void Scene::passiveMotion(int x, int y) {
-	if (theOnlyCurve != NULL) {
-		theOnlyCurve->updateActivePoint(x / (float)width, 
-				(height-y) / (float)height); 
-	}
-	glutPostRedisplay();
+  if (theOnlyCurve != NULL) {
+    theOnlyCurve->updateActivePoint(x / (float)width, 
+        (height-y) / (float)height); 
+  }
+  glutPostRedisplay();
 }
 
 // Nothing here.  You will fill in mouse for WorkingScene

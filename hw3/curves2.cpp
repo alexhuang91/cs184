@@ -6,27 +6,27 @@
 // What happens when you drag the mouse to x and y?  
 // In essence, you are dragging control points on the curve.
 void WorkingScene::drag(int x, int y) {
-	/* YOUR CODE HERE */
-	//you must figure out how to transform x and y so they make sense
-	//update oldx, and oldy
-	//make sure scene gets redrawn
+  /* YOUR CODE HERE */
+  //you must figure out how to transform x and y so they make sense
+  //update oldx, and oldy
+  //make sure scene gets redrawn
 }
 
 // Mouse motion.  You need to respond to left clicks (to add points on curve) 
 // and right clicks (to delete points on curve) 
 void WorkingScene::mouse(int button, int state, int x, int y) {
-	if (theOnlyCurve && state == GLUT_DOWN) {
-		if (button == GLUT_LEFT_BUTTON) {
-			/* YOUR CODE HERE */
-		}
-		if (button == GLUT_RIGHT_BUTTON) {	
-			/* YOUR CODE HERE */
-		}
-	}
+  if (theOnlyCurve && state == GLUT_DOWN) {
+    if (button == GLUT_LEFT_BUTTON) {
+      /* YOUR CODE HERE */
+    }
+    if (button == GLUT_RIGHT_BUTTON) {	
+      /* YOUR CODE HERE */
+    }
+  }
 
-	/* YOUR CODE HERE */
-	//update oldx, and oldy
-	//make sure scene gets redrawn
+  /* YOUR CODE HERE */
+  //update oldx, and oldy
+  //make sure scene gets redrawn
 }
 
 
@@ -37,11 +37,11 @@ void WorkingScene::mouse(int button, int state, int x, int y) {
 // It should support Bezier curves of arbitrary degree/order.
 void Bezier::draw(int levelOfDetail) {
 
-	connectTheDots();
-	int i,j,k;
-	Pvector::iterator p;
+  connectTheDots();
+  int i,j,k;
+  Pvector::iterator p;
 
-	/* YOUR CODE HERE */
+  /* YOUR CODE HERE */
 }
 
 
@@ -53,22 +53,22 @@ void Bezier::draw(int levelOfDetail) {
 void Bspline::draw(int levelOfDetail) {
 
 
-	connectTheDots();
-	/* YOUR CODE HERE */
+  connectTheDots();
+  /* YOUR CODE HERE */
 }
 
 void Bspline::drawSegment(Pvector::iterator p1, Pvector::iterator p2, 
-		Pvector::iterator p3, Pvector::iterator p4, int levelOfDetail) {
+    Pvector::iterator p3, Pvector::iterator p4, int levelOfDetail) {
 
-	float x, y;
-	/* YOUR CODE HERE */
+  float x, y;
+  /* YOUR CODE HERE */
 
-	//draw segment
+  //draw segment
 
-	//then create a Point to be drawn where the knot should be
+  //then create a Point to be drawn where the knot should be
 
-	Point p(x, y);
-	p.draw();
+  Point p(x, y);
+  p.draw();
 }
 
 #include "Bezier2.h"
@@ -79,18 +79,18 @@ void Bspline::drawSegment(Pvector::iterator p1, Pvector::iterator p2,
 //It also takes a set of control points, pts, and fills accum with
 //the control points that correspond to the next level of detail.
 void accumulateNextLevel(Pvector* accum, Pvector pts) {
-	if (pts.empty()) return; 
-	accum->push_back(*(pts.begin()));
-	if (pts.size() == 1) return;
-	for (Pvector::iterator it = pts.begin(); it != pts.end() - 1; it++) {
-		/* YOUR CODE HERE  (only one to three lines)*/
-	}
-	//save the last point
-	Point last = *(pts.end()-1);
-	pts.pop_back();
-	//recursive call
-	accumulateNextLevel(accum, pts);
-	accum->push_back(last);
+  if (pts.empty()) return; 
+  accum->push_back(*(pts.begin()));
+  if (pts.size() == 1) return;
+  for (Pvector::iterator it = pts.begin(); it != pts.end() - 1; it++) {
+    /* YOUR CODE HERE  (only one to three lines)*/
+  }
+  //save the last point
+  Point last = *(pts.end()-1);
+  pts.pop_back();
+  //recursive call
+  accumulateNextLevel(accum, pts);
+  accum->push_back(last);
 }
 
 
@@ -98,33 +98,33 @@ void accumulateNextLevel(Pvector* accum, Pvector pts) {
 // this draws the curve by recursive subdivision.  So, levelofdetail 
 // corresponds to how many times to recurse.  
 void Bezier2::draw(int levelOfDetail) {
-	//This is just a trick to find out if this is the top level call
-	//All recursive calls will be given a negative integer, to be flipped here
-	if (levelOfDetail > 0) {
-		connectTheDots();
-	} else {
-		levelOfDetail = -levelOfDetail;
-	}
+  //This is just a trick to find out if this is the top level call
+  //All recursive calls will be given a negative integer, to be flipped here
+  if (levelOfDetail > 0) {
+    connectTheDots();
+  } else {
+    levelOfDetail = -levelOfDetail;
+  }
 
-	//Base case.  No more recursive calls.
-	if (levelOfDetail <= 1) {
-		if (points.size() >= 2) {
-			for (Pvector::iterator it = points.begin(); it != points.end() - 1; it++) {
+  //Base case.  No more recursive calls.
+  if (levelOfDetail <= 1) {
+    if (points.size() >= 2) {
+      for (Pvector::iterator it = points.begin(); it != points.end() - 1; it++) {
 
-				/* YOUR CODE HERE */
+        /* YOUR CODE HERE */
 
-			}
-		}
-	} else {
-		Pvector* accum = new Pvector();
-		Bezier2 left, right;
+      }
+    }
+  } else {
+    Pvector* accum = new Pvector();
+    Bezier2 left, right;
 
-		//add the correct points to 'left' and 'right'.
-		//You may or may not use accum as you see fit.
-		/* YOUR CODE HERE */
+    //add the correct points to 'left' and 'right'.
+    //You may or may not use accum as you see fit.
+    /* YOUR CODE HERE */
 
-		left.draw(1-levelOfDetail);
-		right.draw(1-levelOfDetail);
-		delete accum;
-	}
+    left.draw(1-levelOfDetail);
+    right.draw(1-levelOfDetail);
+    delete accum;
+  }
 }
