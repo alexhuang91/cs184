@@ -9,12 +9,12 @@
 
 class WorkingScene : public Scene  
 {
-	public:
-		static void drag(int x, int y);
-		static void mouse(int button, int state, int x, int y);
+  public:
+    static void drag(int x, int y);
+    static void mouse(int button, int state, int x, int y);
 
-		WorkingScene() {};
-		virtual ~WorkingScene() {};
+    WorkingScene() {};
+    virtual ~WorkingScene() {};
 
 };
 

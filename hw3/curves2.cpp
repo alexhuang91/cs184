@@ -10,23 +10,34 @@ void WorkingScene::drag(int x, int y) {
   //you must figure out how to transform x and y so they make sense
   //update oldx, and oldy
   //make sure scene gets redrawn
+  int diffx = x - oldx, diffy = oldy - y;
+  float normx = diffx /(float)width, normy = diffy / (float)height;
+  theOnlyCurve->moveActivePoint(normx, normy);
+  oldx = x;
+  oldy = y;
+  glutPostRedisplay();
 }
 
 // Mouse motion.  You need to respond to left clicks (to add points on curve) 
 // and right clicks (to delete points on curve) 
 void WorkingScene::mouse(int button, int state, int x, int y) {
+  float normx = x / (float)width, normy = (height-y) / (float)height;
   if (theOnlyCurve && state == GLUT_DOWN) {
     if (button == GLUT_LEFT_BUTTON) {
       /* YOUR CODE HERE */
+      theOnlyCurve->addPoint(normx,normy);
     }
     if (button == GLUT_RIGHT_BUTTON) {	
       /* YOUR CODE HERE */
+      theOnlyCurve->deleteActivePoint();
     }
   }
-
   /* YOUR CODE HERE */
   //update oldx, and oldy
   //make sure scene gets redrawn
+  oldx = x;
+  oldy = y;
+  glutPostRedisplay();
 }
 
 
