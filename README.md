@@ -11,11 +11,13 @@ Example request(this does not use your api key, it uses another one of ours):
 http://chatsportslabs.com:4567/sites/search/giant?key=YOUR_API_KEY&signature=67f2d4679abd856c40fa8dd5554a8bb0
 
 ## We use [JSend-style](http://labs.omniti.com/labs/jsend) responses:
-- ### Successful Response:
-      { "status" : "success",
+- #### Successful Response:
+      ```json
+         {
+          "status" : "success",
           "data" : { "session_key" : <key>,
                             "user" : {       "id" : "<user_id>",
-                                       "username" : "<username>" } } }
+                                       "username" : "<username>" } } }```
 
 - #### Error Response:
       {  "status" : "error",
